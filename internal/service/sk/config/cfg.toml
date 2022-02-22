@@ -1,0 +1,34 @@
+[jwt]
+expireDuration = 24
+secret = "i1ydX9RtHyuJTrw7frcu"
+
+[mysql]
+[mysql.base]
+connMaxLifeTime = 60
+maxIdleConn = 60
+maxOpenConn = 10
+addr = "mysql-0.mysql.mysql.svc.cluster.local:3306"
+name = "seckill"
+pass = "root"
+user = "root"
+
+[redis]
+addr = "redis.mysql.svc.cluster.local:6379"
+db = "0"
+maxRetries = 3
+minIdleConns = 5
+pass = "123456"
+poolSize = 10
+
+[log]
+logPath = "./sk-shop-sk.log"
+level = "debug" # DEBUG INFO WARN ERROR
+stdout = true
+
+[server]
+serverName = "sk_shop_sk"
+host = ":8082"
+pprof = true
+
+[jaeger]
+udpEndpoint = "http://localhost:14268/api/traces"
