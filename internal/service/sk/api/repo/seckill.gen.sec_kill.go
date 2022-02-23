@@ -30,6 +30,47 @@ func (obj *_SecKillMgr) WithContext(c context.Context) *_SecKillMgr {
 	return obj
 }
 
+func (obj *_SecKillMgr) WithSelects(idName string, selects ...string) *_SecKillMgr {
+	if len(selects) > 0 {
+		if len(idName) > 0 {
+			selects = append(selects, idName)
+		}
+		// 对Select进行去重
+		selectMap := make(map[string]int, len(selects))
+		for _, e := range selects {
+			if _, ok := selectMap[e]; !ok {
+				selectMap[e] = 1
+			}
+		}
+
+		newSelects := make([]string, 0, len(selects))
+		for k, _ := range selectMap {
+			newSelects = append(newSelects, k)
+		}
+
+		obj.DB = obj.DB.Select(newSelects)
+	}
+	return obj
+}
+
+func (obj *_SecKillMgr) WithOmit(omit ...string) *_SecKillMgr {
+	if len(omit) > 0 {
+		obj.DB = obj.DB.Omit(omit...)
+	}
+	return obj
+}
+
+func (obj *_SecKillMgr) WithOptions(opts ...Option) *_SecKillMgr {
+	options := options{
+		query: make(map[string]interface{}, len(opts)),
+	}
+	for _, o := range opts {
+		o.apply(&options)
+	}
+	obj.DB = obj.DB.Where(options.query)
+	return obj
+}
+
 // GetTableName get sql table name.获取数据库名字
 func (obj *_SecKillMgr) GetTableName() string {
 	return "sec_kill"
@@ -37,7 +78,7 @@ func (obj *_SecKillMgr) GetTableName() string {
 
 // Reset 重置gorm会话
 func (obj *_SecKillMgr) Reset() *_SecKillMgr {
-	obj.New()
+	obj.new()
 	return obj
 }
 
@@ -55,14 +96,9 @@ func (obj *_SecKillMgr) Gets() (results []*model.SecKill, err error) {
 	return
 }
 
-////////////////////////////////// gorm replace /////////////////////////////////
 func (obj *_SecKillMgr) Count(count *int64) (tx *gorm.DB) {
 	return obj.DB.WithContext(obj.ctx).Model(model.SecKill{}).Count(count)
 }
-
-//////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////option case ////////////////////////////////////////////
 
 // WithID id获取
 func (obj *_SecKillMgr) WithID(id int) Option {
@@ -93,36 +129,6 @@ func (obj *_SecKillMgr) WithStatus(status int8) Option {
 func (obj *_SecKillMgr) WithCreateTime(createTime int) Option {
 	return optionFunc(func(o *options) { o.query["create_time"] = createTime })
 }
-
-// GetByOption 功能选项模式获取
-func (obj *_SecKillMgr) GetByOption(opts ...Option) (result model.SecKill, err error) {
-	options := options{
-		query: make(map[string]interface{}, len(opts)),
-	}
-	for _, o := range opts {
-		o.apply(&options)
-	}
-
-	err = obj.DB.WithContext(obj.ctx).Model(model.SecKill{}).Where(options.query).Find(&result).Error
-
-	return
-}
-
-// GetByOptions 批量功能选项模式获取
-func (obj *_SecKillMgr) GetByOptions(opts ...Option) (results []*model.SecKill, err error) {
-	options := options{
-		query: make(map[string]interface{}, len(opts)),
-	}
-	for _, o := range opts {
-		o.apply(&options)
-	}
-
-	err = obj.DB.WithContext(obj.ctx).Model(model.SecKill{}).Where(options.query).Find(&results).Error
-
-	return
-}
-
-//////////////////////////enume case ////////////////////////////////////////////
 
 // GetFromID 通过id获取内容
 func (obj *_SecKillMgr) GetFromID(id int) (result model.SecKill, err error) {
@@ -208,11 +214,20 @@ func (obj *_SecKillMgr) GetBatchFromCreateTime(createTimes []int) (results []*mo
 	return
 }
 
-//////////////////////////primary index case ////////////////////////////////////////////
+func (obj *_SecKillMgr) CreateSecKill(bean *model.SecKill) (err error) {
+	err = obj.DB.WithContext(obj.ctx).Model(model.SecKill{}).Create(bean).Error
 
-// FetchByPrimaryKey primary or index 获取唯一内容
-func (obj *_SecKillMgr) FetchByPrimaryKey(id int) (result model.SecKill, err error) {
-	err = obj.DB.WithContext(obj.ctx).Model(model.SecKill{}).Where("`id` = ?", id).Find(&result).Error
+	return
+}
+
+func (obj *_SecKillMgr) UpdateSecKill(bean *model.SecKill) (err error) {
+	err = obj.DB.WithContext(obj.ctx).Model(bean).Updates(bean).Error
+
+	return
+}
+
+func (obj *_SecKillMgr) DeleteSecKill(bean *model.SecKill) (err error) {
+	err = obj.DB.WithContext(obj.ctx).Model(model.SecKill{}).Delete(bean).Error
 
 	return
 }
