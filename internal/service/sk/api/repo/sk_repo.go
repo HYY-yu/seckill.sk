@@ -40,7 +40,6 @@ func (obj *_SecKillMgr) ListSK(
 			return db.Where(model.SecKillColumns.ID+" = ?", i)
 		}).
 		sort(sort, model.SecKillColumns.ID+" desc").
-		Where(model.SecKillColumns.DeleteTime + " = 0").
 		Limit(limit).
 		Offset(offset).
 		Find(&result).Error
@@ -54,7 +53,6 @@ func (obj *_SecKillMgr) CountSK(
 		addWhere(filter[model.SecKillColumns.ID], util.IsNotZero, func(db *gorm.DB, i interface{}) *gorm.DB {
 			return db.Where(model.SecKillColumns.ID+" = ?", i)
 		}).
-		Where(model.SecKillColumns.DeleteTime + " = 0").
 		Debug().
 		Count(&count).Error
 	return

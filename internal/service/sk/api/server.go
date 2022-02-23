@@ -9,6 +9,7 @@ import (
 	"github.com/HYY-yu/seckill.pkg/pkg/metrics"
 
 	"github.com/HYY-yu/seckill.sk/internal/pkg/middleware"
+	"github.com/HYY-yu/seckill.sk/internal/service/sk/api/handler"
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/config"
 
 	"github.com/HYY-yu/seckill.pkg/pkg/jaeger"
@@ -19,10 +20,15 @@ import (
 )
 
 type Handlers struct {
+	skHandler *handler.SKHandler
 }
 
-func NewHandlers() *Handlers {
-	return &Handlers{}
+func NewHandlers(
+	skHandler *handler.SKHandler,
+) *Handlers {
+	return &Handlers{
+		skHandler: skHandler,
+	}
 }
 
 type Server struct {
