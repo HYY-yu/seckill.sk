@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/HYY-yu/seckill.sk/internal/pkg/core"
+	"github.com/HYY-yu/seckill.pkg/core"
 )
 
 func (s *Server) Route(c *Handlers) {

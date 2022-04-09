@@ -4,10 +4,10 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/HYY-yu/seckill.pkg/core"
 	"github.com/HYY-yu/seckill.pkg/pkg/response"
 	"github.com/HYY-yu/seckill.pkg/pkg/token"
 
-	"github.com/HYY-yu/seckill.sk/internal/pkg/core"
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/config"
 )
 

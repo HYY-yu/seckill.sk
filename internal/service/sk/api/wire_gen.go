@@ -6,8 +6,8 @@
 package api
 
 import (
-	"github.com/HYY-yu/seckill.sk/internal/pkg/cache"
-	"github.com/HYY-yu/seckill.sk/internal/pkg/db"
+	"github.com/HYY-yu/seckill.pkg/cache"
+	"github.com/HYY-yu/seckill.pkg/db"
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/api/handler"
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/api/repo"
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/api/svc"
