@@ -1,5 +1,0 @@
-package shop
-
-func Connect() {
-
-}
