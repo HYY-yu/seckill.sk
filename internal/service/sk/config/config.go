@@ -50,6 +50,7 @@ type Config struct {
 
 	Jaeger struct {
 		UdpEndpoint string `toml:"udpEndpoint"`
+		StdOut      bool   `toml:"stdOut"`
 	} `toml:"jaeger"`
 }
 

@@ -5,13 +5,13 @@ import (
 
 	"github.com/HYY-yu/seckill.pkg/cache"
 	"github.com/HYY-yu/seckill.pkg/core"
+	"github.com/HYY-yu/seckill.pkg/core/middleware"
 	"github.com/HYY-yu/seckill.pkg/db"
 	"go.opentelemetry.io/otel/sdk/trace"
 	"go.uber.org/zap"
 
 	"github.com/HYY-yu/seckill.pkg/pkg/metrics"
 
-	"github.com/HYY-yu/seckill.sk/internal/pkg/middleware"
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/api/handler"
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/config"
 
@@ -76,14 +76,19 @@ func NewApiServer(logger *zap.Logger) (*Server, error) {
 	s.Cache = cacheRepo
 
 	// Jaeger
-	tp, err := jaeger.InitJaeger(config.Get().Server.ServerName, config.Get().Jaeger.UdpEndpoint)
+	var tp *trace.TracerProvider
+	if cfg.Jaeger.StdOut {
+		tp, err = jaeger.InitStdOutForDevelopment(cfg.Server.ServerName, cfg.Jaeger.UdpEndpoint)
+	} else {
+		tp, err = jaeger.InitJaeger(cfg.Server.ServerName, cfg.Jaeger.UdpEndpoint)
+	}
 	if err != nil {
 		logger.Error("jaeger error", zap.Error(err))
 	}
 	s.Trace = tp
 
 	// Metrics
-	metrics.InitMetrics(config.Get().Server.ServerName, "api")
+	metrics.InitMetrics(cfg.Server.ServerName, "api")
 
 	opts := make([]core.Option, 0)
 	opts = append(opts, core.WithEnableCors())
@@ -98,7 +103,7 @@ func NewApiServer(logger *zap.Logger) (*Server, error) {
 	}
 	s.Engine = engine
 
-	s.Middles = middleware.New(logger)
+	s.Middles = middleware.New(logger, cfg.JWT.Secret)
 
 	// Init Repo Svc Handler
 	c, err := initHandlers(s.DB, s.Cache)
