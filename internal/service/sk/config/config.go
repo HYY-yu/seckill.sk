@@ -46,6 +46,9 @@ type Config struct {
 		ServerName string `toml:"serverName"`
 		Host       string `toml:"host"`
 		Pprof      bool   `toml:"pprof"`
+		Grpc       struct {
+			ShopHost string `toml:"shopHost"`
+		} `toml:"grpc"`
 	} `toml:"server"`
 
 	Jaeger struct {

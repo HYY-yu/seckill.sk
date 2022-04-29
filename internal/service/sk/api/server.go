@@ -3,10 +3,11 @@ package api
 import (
 	"errors"
 
-	"github.com/HYY-yu/seckill.pkg/cache"
+	"github.com/HYY-yu/seckill.pkg/cache_v2"
 	"github.com/HYY-yu/seckill.pkg/core"
 	"github.com/HYY-yu/seckill.pkg/core/middleware"
 	"github.com/HYY-yu/seckill.pkg/db"
+	"github.com/HYY-yu/seckill.shop/proto/client"
 	"go.opentelemetry.io/otel/sdk/trace"
 	"go.uber.org/zap"
 
@@ -34,7 +35,7 @@ type Server struct {
 	Logger  *zap.Logger
 	Engine  core.Engine
 	DB      db.Repo
-	Cache   cache.Repo
+	Cache   cache_v2.Repo
 	Trace   *trace.TracerProvider
 	Middles middleware.Middleware
 }
@@ -62,7 +63,7 @@ func NewApiServer(logger *zap.Logger) (*Server, error) {
 	}
 	s.DB = dbRepo
 
-	cacheRepo, err := cache.New(cfg.Server.ServerName, &cache.RedisConf{
+	cacheRepo, err := cache_v2.New(cfg.Server.ServerName, &cache_v2.RedisConf{
 		Addr:         cfg.Redis.Addr,
 		Pass:         cfg.Redis.Pass,
 		Db:           cfg.Redis.Db,
@@ -105,8 +106,14 @@ func NewApiServer(logger *zap.Logger) (*Server, error) {
 
 	s.Middles = middleware.New(logger, cfg.JWT.Secret)
 
+	// GRPC Client
+	shopClient, err := client.Connect(cfg.Server.Grpc.ShopHost)
+	if err != nil {
+		panic(err)
+	}
+
 	// Init Repo Svc Handler
-	c, err := initHandlers(s.DB, s.Cache)
+	c, err := initHandlers(s.DB, s.Cache, shopClient)
 	if err != nil {
 		panic(err)
 	}
