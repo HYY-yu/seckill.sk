@@ -2,6 +2,7 @@ package svc
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/HYY-yu/seckill.pkg/cache_v2"
 	"github.com/HYY-yu/seckill.pkg/core"
@@ -86,7 +87,7 @@ func (s *SKSvc) List(sctx core.SvcContext, pr *page.PageRequest) (*page.Page, er
 
 	for i, e := range data {
 		// 查询
-		var sdata *proto.ShopData
+		sdata := new(proto.ShopData)
 		for _, d := range shopDatas {
 			if d.Id == int64(e.ShopID) {
 				sdata = d
@@ -118,6 +119,38 @@ func (s *SKSvc) List(sctx core.SvcContext, pr *page.PageRequest) (*page.Page, er
 	), nil
 }
 
-func (s *SKSvc) Add(sctx core.SvcContext) {
+func (s *SKSvc) Add(sctx core.SvcContext, param *model.SKAdd) error {
+	// 确保 ShopId 存在
+	ctx := sctx.Context()
+	mgr := s.SKRepo.Mgr(ctx, s.DB.GetDb(ctx))
+
+	ok, err := mgr.WithOptions(mgr.WithShopID(param.ShopId)).HasRecord()
+	if err != nil {
+		return response.NewErrorAutoMsg(
+			http.StatusInternalServerError,
+			response.ServerError,
+		).WithErr(err)
+	}
+	if !ok {
+		return response.NewError(
+			http.StatusBadRequest,
+			response.ParamBindError,
+			"请输入正确的ShopId",
+		)
+	}
+
+	startTime := time.Unix(int64(param.StartTime), 0)
+	endTime := time.Unix(int64(param.EndTime), 0)
+
+	if time.Until(startTime) < time.Second*30 {
+		return response.NewError(
+			http.StatusBadRequest,
+			response.ParamBindError,
+			"start_time 过近",
+		)
+	}
+
+	// 存数据库（事务）
+	tx := s.DB.GetDb(ctx)
 
 }

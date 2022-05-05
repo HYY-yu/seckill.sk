@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"fmt"
+
 	"gorm.io/gorm"
 
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/model"
@@ -100,6 +101,16 @@ func (obj *_SecKillMgr) Gets() (results []*model.SecKill, err error) {
 
 func (obj *_SecKillMgr) Count(count *int64) (tx *gorm.DB) {
 	return obj.DB.WithContext(obj.ctx).Model(model.SecKill{}).Count(count)
+}
+
+// TODO add to gormt
+func (obj *_SecKillMgr) HasRecord() (bool, error) {
+	var count int64
+	err := obj.DB.WithContext(obj.ctx).Model(model.SecKill{}).Count(&count).Error
+	if err != nil {
+		return false, err
+	}
+	return count != 0, nil
 }
 
 // WithID id获取
