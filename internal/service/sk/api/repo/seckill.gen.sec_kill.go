@@ -3,7 +3,6 @@ package repo
 import (
 	"context"
 	"fmt"
-
 	"gorm.io/gorm"
 
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/model"
@@ -16,20 +15,12 @@ type _SecKillMgr struct {
 }
 
 // SecKillMgr open func
-func SecKillMgr(db *gorm.DB) *_SecKillMgr {
+func SecKillMgr(ctx context.Context, db *gorm.DB) *_SecKillMgr {
 	if db == nil {
 		panic(fmt.Errorf("SecKillMgr need init by db"))
 	}
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(ctx)
 	return &_SecKillMgr{_BaseMgr: &_BaseMgr{DB: db.Table("sec_kill"), isRelated: globalIsRelated, ctx: ctx, cancel: cancel, timeout: -1}}
-}
-
-// WithContext set context to db
-func (obj *_SecKillMgr) WithContext(c context.Context) *_SecKillMgr {
-	if c != nil {
-		obj.ctx = c
-	}
-	return obj
 }
 
 func (obj *_SecKillMgr) WithSelects(idName string, selects ...string) *_SecKillMgr {
@@ -103,7 +94,6 @@ func (obj *_SecKillMgr) Count(count *int64) (tx *gorm.DB) {
 	return obj.DB.WithContext(obj.ctx).Model(model.SecKill{}).Count(count)
 }
 
-// TODO add to gormt
 func (obj *_SecKillMgr) HasRecord() (bool, error) {
 	var count int64
 	err := obj.DB.WithContext(obj.ctx).Model(model.SecKill{}).Count(&count).Error

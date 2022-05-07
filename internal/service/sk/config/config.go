@@ -55,6 +55,13 @@ type Config struct {
 		UdpEndpoint string `toml:"udpEndpoint"`
 		StdOut      bool   `toml:"stdOut"`
 	} `toml:"jaeger"`
+
+	ElasticJobETCD struct {
+		Endpoints   []string      `toml:"endpoints"`
+		DialTimeout time.Duration `toml:"dialTimeout"`
+		Username    string        `toml:"username"`
+		Password    string        `toml:"password"`
+	} `toml:"elasticJobETCD"`
 }
 
 func InitConfig() {

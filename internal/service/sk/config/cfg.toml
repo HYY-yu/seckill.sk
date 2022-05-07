@@ -35,3 +35,9 @@ shopHost = ":8082"
 [jaeger]
 udpEndpoint = "http://localhost:14268/api/traces"
 stdOut = true
+
+[elasticJobETCD]
+endpoints = ["0.0.0.0:2379", "0.0.0.0:12379", "0.0.0.0:22379"]
+dialTimeout = "5s"
+username = ""
+password = ""
