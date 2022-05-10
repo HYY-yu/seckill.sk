@@ -1,10 +1,13 @@
 [jwt]
-expireDuration = 24
+expireDuration = "2h"
 secret = "i1ydX9RtHyuJTrw7frcu"
+type = "refresh_token"
+# type = "black_list"
+refreshDuration = "168h"
 
 [mysql]
 [mysql.base]
-connMaxLifeTime = 60
+connMaxLifeTime = "60s"
 maxIdleConn = 60
 maxOpenConn = 10
 addr = "127.0.0.1:3306"

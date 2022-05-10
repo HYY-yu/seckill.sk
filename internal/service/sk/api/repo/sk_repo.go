@@ -14,8 +14,6 @@ type SKRepo interface {
 	Mgr(ctx context.Context, db *gorm.DB) *_SecKillMgr
 }
 
-// goodsRepo 薄薄的一层，用来封装_xxMgr
-// Repo 中不要出现字段，否则容易出现并发安全问题。
 type skRepo struct {
 }
 

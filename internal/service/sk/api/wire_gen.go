@@ -10,7 +10,6 @@ import (
 	"github.com/HYY-yu/seckill.pkg/cache_v2"
 	"github.com/HYY-yu/seckill.pkg/db"
 	"github.com/HYY-yu/seckill.shop/proto"
-
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/api/handler"
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/api/repo"
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/api/svc"
@@ -23,6 +22,9 @@ func initHandlers(d db.Repo, c cache_v2.Repo, client proto.ShopClient) (*Handler
 	skRepo := repo.NewSKRepo()
 	skSvc := svc.NewSKSvc(d, c, skRepo, client)
 	skHandler := handler.NewSKHandler(skSvc)
-	handlers := NewHandlers(skHandler)
+	userRepo := repo.NewUserRepo()
+	userSvc := svc.NewUserSvc(d, c, userRepo)
+	loginHandler := handler.NewLoginHandler(userSvc)
+	handlers := NewHandlers(skHandler, loginHandler)
 	return handlers, nil
 }

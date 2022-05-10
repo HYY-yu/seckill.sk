@@ -18,5 +18,5 @@ import (
 
 // initHandlers init Handlers.
 func initHandlers(d db.Repo, c cache_v2.Repo, client proto.ShopClient) (*Handlers, error) {
-	panic(wire.Build(repo.NewSKRepo, svc.NewSKSvc, handler.NewSKHandler, NewHandlers))
+	panic(wire.Build(repo.NewSKRepo, repo.NewUserRepo, svc.NewSKSvc, svc.NewUserSvc, handler.NewSKHandler, handler.NewLoginHandler, NewHandlers))
 }
