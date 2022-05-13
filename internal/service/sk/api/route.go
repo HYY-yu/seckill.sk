@@ -15,6 +15,9 @@ func (s *Server) Route(c *Handlers) {
 		skGroup.DELETE("/resource", c.skHandler.Delete)
 		skGroup.GET("/unlogin", c.loginHandler.Unlogin)
 
+		orderGroup := skGroup.Group("/order")
+		orderGroup.GET("/list", c.orderHandler.List)
+		orderGroup.GET("/join", c.orderHandler.Join)
 	}
 
 	{

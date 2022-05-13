@@ -54,7 +54,9 @@ func (obj *_SecKillMgr) CountSK(
 		addWhere(filter[model.SecKillColumns.ID], util.IsNotZero, func(db *gorm.DB, i interface{}) *gorm.DB {
 			return db.Where(model.SecKillColumns.ID+" = ?", i)
 		}).
-		Debug().
+		addWhere(filter[model.SecKillColumns.Status], util.IsNotZero, func(db *gorm.DB, i interface{}) *gorm.DB {
+			return db.Where(model.SecKillColumns.Status + " > 0")
+		}).
 		Count(&count).Error
 	return
 }

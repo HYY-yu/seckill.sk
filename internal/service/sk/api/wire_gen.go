@@ -25,6 +25,9 @@ func initHandlers(d db.Repo, c cache_v2.Repo, client proto.ShopClient) (*Handler
 	userRepo := repo.NewUserRepo()
 	userSvc := svc.NewUserSvc(d, c, userRepo)
 	loginHandler := handler.NewLoginHandler(userSvc)
-	handlers := NewHandlers(skHandler, loginHandler)
+	orderRepo := repo.NewOrderRepo()
+	orderSvc := svc.NewOrderSvc(d, c, skRepo, orderRepo, userRepo, client)
+	orderHandler := handler.NewOrderHandler(orderSvc)
+	handlers := NewHandlers(skHandler, loginHandler, orderHandler)
 	return handlers, nil
 }

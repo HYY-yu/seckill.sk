@@ -43,6 +43,7 @@ func NewSKSvc(
 	}
 	// 延时任务注册
 	elastic_job.Get().RegisterHandler(model.SKDelayAddTag, svc.SKDelayAddHandler)
+	elastic_job.Get().RegisterHandler(model.SKDelayEndTag, svc.SKDelayEndHandler)
 
 	return svc
 }
@@ -221,6 +222,24 @@ func (s *SKSvc) Add(sctx core.SvcContext, param *model.SKAdd) error {
 		).WithErr(err)
 	}
 
+	keyEnd := fmt.Sprintf("%s/%s", model.SKDelayEndTag, encrypt.MD5(uuid.New().String()))
+	err = elastic_job.Get().AddJob(&elastic_job.Job{
+		Key:       keyEnd,
+		DelayTime: param.EndTime.Unix(),
+		Tag:       model.SKDelayEndTag,
+		Args: map[string]interface{}{
+			"id": bean.ID,
+		},
+	})
+	if err != nil {
+		tx.Rollback()
+		return response.NewError(
+			http.StatusInternalServerError,
+			response.ServerError,
+			"无法开启定时-End",
+		).WithErr(err)
+	}
+
 	tx.Commit()
 	mgr.Reset()
 	return nil
@@ -273,5 +292,35 @@ func (s *SKSvc) SKDelayAddHandler(j *elastic_job.Job) error {
 		return fmt.Errorf("err from db: %w ", err)
 	}
 
+	return nil
+}
+
+func (s *SKSvc) SKDelayEndHandler(j *elastic_job.Job) error {
+	idInter, ok := j.Args["id"]
+	if !ok {
+		return fmt.Errorf("unfound the id. ")
+	}
+	id := cast.ToInt(idInter)
+
+	mgr := s.SKRepo.Mgr(context.Background(), s.DB.GetDb(context.Background()))
+
+	// 检查SecKill状态
+	sk, err := mgr.WithOptions(mgr.WithID(id)).WithSelects(model.SecKillColumns.ID, model.SecKillColumns.Status).Get()
+	if err != nil {
+		return fmt.Errorf("err from db: %w ", err)
+	}
+	if sk.Status != model.SKShopping {
+		// 只有 SKShopping 状态可以
+		// 不是则直接退出（无害操作）
+		return nil
+	}
+
+	err = mgr.UpdateSecKill(&model.SecKill{
+		ID:     id,
+		Status: model.SKFinish,
+	})
+	if err != nil {
+		return fmt.Errorf("err from db: %w ", err)
+	}
 	return nil
 }

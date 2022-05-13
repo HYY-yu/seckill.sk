@@ -34,3 +34,19 @@ const (
 )
 
 const SKDelayAddTag = "SKDelayAddTag"
+const SKDelayEndTag = "SKDelayEndTag"
+
+type OrderListResp struct {
+	ID       int    `json:"id"`
+	ShopId   int    `json:"shop_id"`
+	ShopName string `json:"shop_name"`
+	UserId   int    `json:"user_id"`
+	UserName string `json:"user_name"`
+	SkID     int    `json:"sk_id"`
+
+	CreateTime int `json:"create_time"`
+}
+
+type OrderJoin struct {
+	SKId int `form:"sk_id" v:"required#请输入正确的ID"`
+}

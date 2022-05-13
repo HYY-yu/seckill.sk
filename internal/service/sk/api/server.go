@@ -22,15 +22,18 @@ import (
 type Handlers struct {
 	skHandler    *handler.SKHandler
 	loginHandler *handler.LoginHandler
+	orderHandler *handler.OrderHandler
 }
 
 func NewHandlers(
 	skHandler *handler.SKHandler,
 	loginHandler *handler.LoginHandler,
+	orderHandler *handler.OrderHandler,
 ) *Handlers {
 	return &Handlers{
 		skHandler:    skHandler,
 		loginHandler: loginHandler,
+		orderHandler: orderHandler,
 	}
 }
 
