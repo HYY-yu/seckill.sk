@@ -3,24 +3,17 @@ module github.com/HYY-yu/seckill.sk
 go 1.17
 
 require (
-	github.com/HYY-yu/seckill.pkg v1.1.8
-	github.com/HYY-yu/seckill.shop v1.1.8-0.20220417160537-e38372f8dcfa
+	github.com/HYY-yu/seckill.pkg v1.2.1
+	github.com/HYY-yu/seckill.shop v1.5.0
 	github.com/fsnotify/fsnotify v1.5.1
-	github.com/go-redis/redis/v8 v8.11.5
 	github.com/gogf/gf/v2 v2.0.0-beta
 	github.com/google/uuid v1.1.2
 	github.com/google/wire v0.5.0
 	github.com/spf13/cast v1.4.1
 	github.com/spf13/viper v1.9.0
-	github.com/stretchr/testify v1.7.1
 	go.opentelemetry.io/otel/sdk v1.4.1
 	go.uber.org/zap v1.20.0
 	gorm.io/gorm v1.23.4
-)
-
-replace (
-	github.com/HYY-yu/seckill.pkg => ../seckill.pkg
-	github.com/HYY-yu/seckill.shop => ../seckill.shop
 )
 
 require (
@@ -35,7 +28,6 @@ require (
 	github.com/clbanning/mxj/v2 v2.5.5 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/gin-contrib/pprof v1.3.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
@@ -51,6 +43,7 @@ require (
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/go-redis/redis/extra/rediscmd/v8 v8.11.5 // indirect
 	github.com/go-redis/redis/extra/redisotel/v8 v8.11.5 // indirect
+	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
@@ -70,7 +63,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.11.1 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.26.0 // indirect
