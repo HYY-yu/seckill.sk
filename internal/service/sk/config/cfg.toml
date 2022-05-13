@@ -20,7 +20,7 @@ addr = "redis.mysql.svc.cluster.local:6379"
 db = "0"
 maxRetries = 3
 minIdleConns = 5
-pass = "redis"
+pass = "123456"
 poolSize = 10
 
 [log]
@@ -42,5 +42,5 @@ stdOut = true
 [elasticJobETCD]
 endpoints = ["infra-etcd-cluster-0.infra-etcd-cluster.etcd.svc.cluster.local:2379"]
 dialTimeout = "5s"
-username = "root"
-password = "123321"
+username = ""
+password = ""
