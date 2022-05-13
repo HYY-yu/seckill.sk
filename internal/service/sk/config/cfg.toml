@@ -33,7 +33,7 @@ serverName = "sk_shop_sk"
 host = ":8091"
 pprof = true
 [server.grpc]
-shopHost = ":8082"
+shopHost = "sk-shop-release-chart.default.svc.cluster.local:8082"
 
 [jaeger]
 udpEndpoint = "http://tempo.kube-ops.svc.cluster.local:14268/api/traces"
