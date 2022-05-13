@@ -36,11 +36,11 @@ pprof = true
 shopHost = ":8082"
 
 [jaeger]
-udpEndpoint = "http://localhost:14268/api/traces"
+udpEndpoint = "http://tempo.kube-ops.svc.cluster.local:14268/api/traces"
 stdOut = true
 
 [elasticJobETCD]
-endpoints = ["0.0.0.0:2379", "0.0.0.0:12379", "0.0.0.0:22379"]
+endpoints = ["infra-etcd-cluster-0.infra-etcd-cluster.etcd.svc.cluster.local:2379"]
 dialTimeout = "5s"
-username = ""
-password = ""
+username = "root"
+password = "123321"
