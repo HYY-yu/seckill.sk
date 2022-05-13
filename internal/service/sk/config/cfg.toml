@@ -1,10 +1,13 @@
 [jwt]
-expireDuration = 24
+expireDuration = "2h"
 secret = "i1ydX9RtHyuJTrw7frcu"
+type = "refresh_token"
+# type = "black_list"
+refreshDuration = "168h"
 
 [mysql]
 [mysql.base]
-connMaxLifeTime = 60
+connMaxLifeTime = "60s"
 maxIdleConn = 60
 maxOpenConn = 10
 addr = "mysql-0.mysql.mysql.svc.cluster.local:3306"
@@ -17,7 +20,7 @@ addr = "redis.mysql.svc.cluster.local:6379"
 db = "0"
 maxRetries = 3
 minIdleConns = 5
-pass = "123456"
+pass = "redis"
 poolSize = 10
 
 [log]
@@ -27,8 +30,17 @@ stdout = true
 
 [server]
 serverName = "sk_shop_sk"
-host = ":8082"
+host = ":8091"
 pprof = true
+[server.grpc]
+shopHost = ":8082"
 
 [jaeger]
 udpEndpoint = "http://localhost:14268/api/traces"
+stdOut = true
+
+[elasticJobETCD]
+endpoints = ["0.0.0.0:2379", "0.0.0.0:12379", "0.0.0.0:22379"]
+dialTimeout = "5s"
+username = ""
+password = ""

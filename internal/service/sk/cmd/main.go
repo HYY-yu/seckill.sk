@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/HYY-yu/seckill.pkg/pkg/elastic_job"
+	"github.com/HYY-yu/seckill.pkg/pkg/elastic_job/storage"
 	"go.uber.org/zap"
 
 	"github.com/HYY-yu/seckill.sk/internal/service/sk/api"
@@ -25,6 +27,20 @@ func main() {
 	defer func() {
 		_ = l.Sync()
 	}()
+
+	// 初始化延时任务
+	err = elastic_job.InitGlobalJob(
+		elastic_job.WithLogger(l),
+		elastic_job.WithStorage(storage.ETCD, &storage.Config{
+			Endpoints:   config.Get().ElasticJobETCD.Endpoints,
+			DialTimeout: config.Get().ElasticJobETCD.DialTimeout,
+			Username:    config.Get().ElasticJobETCD.Username,
+			Password:    config.Get().ElasticJobETCD.Password,
+		}),
+	)
+	if err != nil {
+		panic(err)
+	}
 
 	// 初始化HTTP服务
 	s, err := api.NewApiServer(l)

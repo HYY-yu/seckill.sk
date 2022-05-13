@@ -14,8 +14,6 @@ type SKRepo interface {
 	Mgr(ctx context.Context, db *gorm.DB) *_SecKillMgr
 }
 
-// goodsRepo 薄薄的一层，用来封装_xxMgr
-// Repo 中不要出现字段，否则容易出现并发安全问题。
 type skRepo struct {
 }
 
@@ -24,7 +22,7 @@ func NewSKRepo() SKRepo {
 }
 
 func (*skRepo) Mgr(ctx context.Context, db *gorm.DB) *_SecKillMgr {
-	skMgr := SecKillMgr(db).WithContext(ctx)
+	skMgr := SecKillMgr(ctx, db)
 	return skMgr
 }
 
@@ -38,6 +36,9 @@ func (obj *_SecKillMgr) ListSK(
 	err = obj.
 		addWhere(filter[model.SecKillColumns.ID], util.IsNotZero, func(db *gorm.DB, i interface{}) *gorm.DB {
 			return db.Where(model.SecKillColumns.ID+" = ?", i)
+		}).
+		addWhere(filter[model.SecKillColumns.Status], util.IsNotZero, func(db *gorm.DB, i interface{}) *gorm.DB {
+			return db.Where(model.SecKillColumns.Status + " > 0")
 		}).
 		sort(sort, model.SecKillColumns.ID+" desc").
 		Limit(limit).
@@ -53,7 +54,9 @@ func (obj *_SecKillMgr) CountSK(
 		addWhere(filter[model.SecKillColumns.ID], util.IsNotZero, func(db *gorm.DB, i interface{}) *gorm.DB {
 			return db.Where(model.SecKillColumns.ID+" = ?", i)
 		}).
-		Debug().
+		addWhere(filter[model.SecKillColumns.Status], util.IsNotZero, func(db *gorm.DB, i interface{}) *gorm.DB {
+			return db.Where(model.SecKillColumns.Status + " > 0")
+		}).
 		Count(&count).Error
 	return
 }

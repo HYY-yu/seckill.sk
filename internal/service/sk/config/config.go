@@ -32,8 +32,10 @@ type Config struct {
 	} `toml:"redis"`
 
 	JWT struct {
-		Secret         string        `toml:"secret"`
-		ExpireDuration time.Duration `toml:"expireDuration"`
+		Secret          string        `toml:"secret"`
+		ExpireDuration  time.Duration `toml:"expireDuration"`
+		Type            string        `toml:"type"`
+		RefreshDuration time.Duration `toml:"refreshDuration"`
 	} `toml:"jwt"`
 
 	Log struct {
@@ -46,11 +48,22 @@ type Config struct {
 		ServerName string `toml:"serverName"`
 		Host       string `toml:"host"`
 		Pprof      bool   `toml:"pprof"`
+		Grpc       struct {
+			ShopHost string `toml:"shopHost"`
+		} `toml:"grpc"`
 	} `toml:"server"`
 
 	Jaeger struct {
 		UdpEndpoint string `toml:"udpEndpoint"`
+		StdOut      bool   `toml:"stdOut"`
 	} `toml:"jaeger"`
+
+	ElasticJobETCD struct {
+		Endpoints   []string      `toml:"endpoints"`
+		DialTimeout time.Duration `toml:"dialTimeout"`
+		Username    string        `toml:"username"`
+		Password    string        `toml:"password"`
+	} `toml:"elasticJobETCD"`
 }
 
 func InitConfig() {
