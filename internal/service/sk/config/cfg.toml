@@ -27,6 +27,7 @@ poolSize = 10
 logPath = "./sk-shop-sk.log"
 level = "debug" # DEBUG INFO WARN ERROR
 stdout = true
+jsonFormat = false
 
 [server]
 serverName = "sk_shop_sk"
