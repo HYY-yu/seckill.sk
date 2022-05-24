@@ -3,7 +3,7 @@ module github.com/HYY-yu/seckill.sk
 go 1.17
 
 require (
-	github.com/HYY-yu/seckill.pkg v1.2.2
+	github.com/HYY-yu/seckill.pkg v1.2.4
 	github.com/HYY-yu/seckill.shop v1.5.0
 	github.com/fsnotify/fsnotify v1.5.1
 	github.com/gogf/gf/v2 v2.0.0-beta
@@ -63,10 +63,10 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
-	github.com/prometheus/client_golang v1.11.1 // indirect
+	github.com/prometheus/client_golang v1.12.2 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
-	github.com/prometheus/common v0.26.0 // indirect
-	github.com/prometheus/procfs v0.6.0 // indirect
+	github.com/prometheus/common v0.32.1 // indirect
+	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/rs/cors v1.8.1 // indirect
 	github.com/rs/cors/wrapper/gin v0.0.0-20220223021805-a4a5ce87d5a2 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
@@ -104,4 +104,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	gorm.io/driver/mysql v1.3.3 // indirect
+	gorm.io/plugin/prometheus v0.0.0-20220517015831-ca6bfaf20bf4 // indirect
 )
