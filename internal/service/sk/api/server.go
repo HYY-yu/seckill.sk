@@ -2,8 +2,9 @@ package api
 
 import (
 	"errors"
+	"strings"
 
-	"github.com/HYY-yu/seckill.pkg/cache_v2"
+	"github.com/HYY-yu/seckill.pkg/cache"
 	"github.com/HYY-yu/seckill.pkg/core"
 	"github.com/HYY-yu/seckill.pkg/core/middleware"
 	"github.com/HYY-yu/seckill.pkg/db"
@@ -41,7 +42,7 @@ type Server struct {
 	Logger  *zap.Logger
 	Engine  core.Engine
 	DB      db.Repo
-	Cache   cache_v2.Repo
+	Cache   cache.Repo
 	Trace   *trace.TracerProvider
 	Middles middleware.Middleware
 }
@@ -69,7 +70,7 @@ func NewApiServer(logger *zap.Logger) (*Server, error) {
 	}
 	s.DB = dbRepo
 
-	cacheRepo, err := cache_v2.New(cfg.Server.ServerName, &cache_v2.RedisConf{
+	cacheRepo, err := cache.New(cfg.Server.ServerName, &cache.RedisConf{
 		Addr:         cfg.Redis.Addr,
 		Pass:         cfg.Redis.Pass,
 		Db:           cfg.Redis.Db,
@@ -95,7 +96,8 @@ func NewApiServer(logger *zap.Logger) (*Server, error) {
 	s.Trace = tp
 
 	// Metrics
-	metrics.InitMetrics(cfg.Server.ServerName, "api")
+	sn := strings.Split(cfg.Server.ServerName, "_")
+	metrics.InitMetrics(strings.Join(sn[:2], "_"))
 
 	opts := make([]core.Option, 0)
 	opts = append(opts, core.WithEnableCors())

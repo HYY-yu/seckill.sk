@@ -3,7 +3,7 @@ package svc
 import (
 	"net/http"
 
-	"github.com/HYY-yu/seckill.pkg/cache_v2"
+	"github.com/HYY-yu/seckill.pkg/cache"
 	"github.com/HYY-yu/seckill.pkg/core"
 	"github.com/HYY-yu/seckill.pkg/db"
 	"github.com/HYY-yu/seckill.pkg/pkg/login"
@@ -16,7 +16,7 @@ import (
 
 type UserSvc struct {
 	DB    db.Repo
-	Cache cache_v2.Repo
+	Cache cache.Repo
 
 	UserRepo repo.UserRepo
 
@@ -25,7 +25,7 @@ type UserSvc struct {
 
 func NewUserSvc(
 	db db.Repo,
-	ca cache_v2.Repo,
+	ca cache.Repo,
 	userRepo repo.UserRepo,
 ) *UserSvc {
 	svc := &UserSvc{

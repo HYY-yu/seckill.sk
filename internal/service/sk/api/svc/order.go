@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/HYY-yu/seckill.pkg/cache_v2"
+	"github.com/HYY-yu/seckill.pkg/cache"
 	"github.com/HYY-yu/seckill.pkg/core"
 	"github.com/HYY-yu/seckill.pkg/db"
 	"github.com/HYY-yu/seckill.pkg/pkg/page"
@@ -18,7 +18,7 @@ import (
 
 type OrderSvc struct {
 	DB    db.Repo
-	Cache cache_v2.Repo
+	Cache cache.Repo
 
 	SKRepo     repo.SKRepo
 	OrderRepo  repo.OrderRepo
@@ -28,7 +28,7 @@ type OrderSvc struct {
 
 func NewOrderSvc(
 	db db.Repo,
-	ca cache_v2.Repo,
+	ca cache.Repo,
 	skRepo repo.SKRepo,
 	orderRepo repo.OrderRepo,
 	userRepo repo.UserRepo,
